@@ -1,0 +1,82 @@
+version: 2
+
+models:
+  - name: stg_apartment_prices
+    description: "Staged apartment prices data"
+    columns:
+      - name: id
+        description: "Unique identifier"
+      - name: price
+        description: "Price in USD"
+      - name: area
+        description: "Area in square meters"
+      - name: rooms
+        description: "Number of rooms"
+      - name: city
+        description: "City name"
+      - name: neighborhood
+        description: "Neighborhood name"
+      - name: date
+        description: "Listing date"
+      - name: price_per_sqm
+        description: "Price per square meter"
+
+  - name: price_analysis
+    description: "Monthly price analysis by city and neighborhood"
+    columns:
+      - name: city
+        description: "City name"
+      - name: neighborhood
+        description: "Neighborhood name"
+      - name: date
+        description: "Month (first day of month)"
+      - name: avg_price
+        description: "Average price in USD"
+      - name: avg_price_per_sqm
+        description: "Average price per square meter in USD"
+      - name: listing_count
+        description: "Number of listings"
+      - name: prev_month_avg_price
+        description: "Average price in the previous month"
+      - name: price_change_pct
+        description: "Percentage change in price from previous month"
+
+  - name: time_series
+    description: "Monthly time series of apartment prices by city"
+    columns:
+      - name: city
+        description: "City name"
+      - name: date
+        description: "Month (first day of month)"
+      - name: avg_price
+        description: "Average price in USD"
+      - name: avg_price_per_sqm
+        description: "Average price per square meter in USD"
+      - name: listing_count
+        description: "Number of listings"
+      - name: avg_price_1_room
+        description: "Average price for 1-room apartments"
+      - name: avg_price_2_rooms
+        description: "Average price for 2-room apartments"
+      - name: avg_price_3_rooms
+        description: "Average price for 3-room apartments"
+      - name: avg_price_4plus_rooms
+        description: "Average price for 4+ room apartments"
+
+  - name: room_price_comparison
+    description: "Price comparison by room count across cities"
+    columns:
+      - name: city
+        description: "City name"
+      - name: rooms
+        description: "Number of rooms"
+      - name: date
+        description: "Month (first day of month)"
+      - name: listing_count
+        description: "Number of listings"
+      - name: avg_price
+        description: "Average price in USD"
+      - name: avg_price_per_sqm
+        description: "Average price per square meter in USD"
+      - name: avg_area
+        description: "Average area in square meters"

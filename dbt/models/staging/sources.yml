@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('GCP_PROJECT') }}"
+    schema: caucasus_apartments
+    tables:
+      - name: apartment_prices
+        description: "Raw apartment prices data from Tbilisi, Yerevan, and Baku"
+        columns:
+          - name: id
+            description: "Unique identifier"
+          - name: price
+            description: "Price in USD"
+          - name: area
+            description: "Area in square meters"
+          - name: rooms
+            description: "Number of rooms"
+          - name: city
+            description: "City name"
+          - name: neighborhood
+            description: "Neighborhood name"
+          - name: date
+            description: "Listing date"
+          - name: price_per_sqm
+            description: "Price per square meter"

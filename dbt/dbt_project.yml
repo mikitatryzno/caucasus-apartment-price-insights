@@ -1,0 +1,28 @@
+name: 'caucasus_apartments'
+version: '1.0.0'
+config-version: 2
+
+profile: 'caucasus_apartments'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  caucasus_apartments:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
+      +partition_by:
+        field: date
+        data_type: date
+      +cluster_by: ["city", "neighborhood"]
