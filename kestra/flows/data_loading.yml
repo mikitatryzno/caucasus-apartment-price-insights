@@ -1,0 +1,28 @@
+id: apartment-data-loading
+namespace: caucasus-apartments
+description: "Load processed data to BigQuery"
+
+inputs:
+  - name: data_date
+    type: string
+    default: "{{ now() | dateFormat('yyyy-MM-dd') }}"
+
+tasks:
+  - id: trigger-processing
+    type: io.kestra.core.tasks.flows.Flow
+    namespace: caucasus-apartments
+    flowId: apartment-data-processing
+    inputs:
+      data_date: "{{ inputs.data_date }}"
+
+  - id: load-to-bigquery
+    type: io.kestra.plugin.gcp.bigquery.LoadFromGCS
+    from: "gs://{{ gcp.bucket }}/processed/{{ inputs.data_date }}/*.parquet"
+    destinationTable: "{{ gcp.project }}.caucasus_apartments.apartment_prices"
+    format: PARQUET
+    createDisposition: CREATE_IF_NEEDED
+    writeDisposition: WRITE_APPEND
+
+  - id: notify-success
+    type: io.kestra.core.tasks.log.Log
+    message: "Successfully loaded apartment data to BigQuery for {{ inputs.data_date }}"

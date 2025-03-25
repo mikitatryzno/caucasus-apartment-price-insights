@@ -1,0 +1,56 @@
+id: apartment-data-ingestion
+namespace: caucasus-apartments
+description: "Download and ingest apartment data from CSV files"
+
+inputs:
+  - name: data_date
+    type: string
+    default: "{{ now() | dateFormat('yyyy-MM-dd') }}"
+
+tasks:
+  - id: load-data
+    type: io.kestra.plugin.scripts.python.Script
+    script: |
+      import os
+      import pandas as pd
+      
+      # Define output directory
+      output_dir = "/tmp/raw"
+      os.makedirs(output_dir, exist_ok=True)
+      
+      # Define paths to your CSV files
+      files = {
+          "tbilisi": "/app/data/tbilisi_apartment_data.csv",
+          "yerevan": "/app/data/yerevan_apartment_data.csv",
+          "baku": "/app/data/baku_apartment_data.csv"
+      }
+      
+      # Load and save each dataset
+      for city, file_path in files.items():
+          try:
+              # Read the CSV file
+              df = pd.read_csv(file_path)
+              
+              # Add city column if not present
+              if 'city' not in df.columns:
+                  df['city'] = city.capitalize()
+              
+              # Save to output directory
+              output_path = f"{output_dir}/{city}_apartments_{kestra.inputs.data_date}.csv"
+              df.to_csv(output_path, index=False)
+              print(f"Saved {city} data to {output_path}")
+          except Exception as e:
+              print(f"Error loading {city} data: {e}")
+              raise
+      
+      # Return the output directory for next tasks
+      kestra.outputs.raw_data_dir = output_dir
+
+  - id: upload-to-gcs
+    type: io.kestra.plugin.gcp.gcs.Upload
+    from: "{{ outputs.load-data.raw_data_dir }}/*"
+    to: "gs://{{ gcp.bucket }}/raw/{{ inputs.data_date }}/"
+
+  - id: notify-success
+    type: io.kestra.core.tasks.log.Log
+    message: "Successfully ingested apartment data for {{ inputs.data_date }}"

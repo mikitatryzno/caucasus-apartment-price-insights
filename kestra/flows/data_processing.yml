@@ -1,0 +1,32 @@
+id: apartment-data-processing
+namespace: caucasus-apartments
+description: "Process apartment data using Spark"
+
+inputs:
+  - name: data_date
+    type: string
+    default: "{{ now() | dateFormat('yyyy-MM-dd') }}"
+
+tasks:
+  - id: trigger-ingestion
+    type: io.kestra.core.tasks.flows.Flow
+    namespace: caucasus-apartments
+    flowId: apartment-data-ingestion
+    inputs:
+      data_date: "{{ inputs.data_date }}"
+
+  - id: run-spark-job
+    type: io.kestra.plugin.scripts.shell.Commands
+    commands:
+      - >
+        spark-submit 
+        --master spark://spark-master:7077 
+        --name "Apartment Data Processing" 
+        /opt/spark/jobs/data_cleaning.py 
+        --data_date {{ inputs.data_date }}
+        --input_path gs://{{ gcp.bucket }}/raw/{{ inputs.data_date }}/
+        --output_path gs://{{ gcp.bucket }}/processed/{{ inputs.data_date }}/
+
+  - id: notify-success
+    type: io.kestra.core.tasks.log.Log
+    message: "Successfully processed apartment data for {{ inputs.data_date }}"
