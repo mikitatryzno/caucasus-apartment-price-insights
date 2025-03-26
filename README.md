@@ -66,15 +66,15 @@ python data/download_data.py
 - Download the service account key as JSON
 - Save it as `dbt/keyfile.json`
 - Set the environment variable:
-  ```
-  export GCP_PROJECT=your-gcp-project-id
-  ```
+```
+export GCP_PROJECT=your-gcp-project-id
+```
 
 4. Start the local environment:
 
-``bash
+```
 docker-compose up -d
-``
+```
 
 5. Access the services:
 - Kestra UI: http://localhost:8080
