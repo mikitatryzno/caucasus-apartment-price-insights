@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # PostgreSQL for Kestra metadata
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: kestra
+      POSTGRES_PASSWORD: kestra
+      POSTGRES_DB: kestra
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kestra"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Kestra server
+  kestra:
+    build:
+      context: ./docker/kestra
+    environment:
+      KESTRA_CONFIGURATION: |
+        kestra:
+          repository:
+            type: postgres
+            postgres:
+              url: jdbc:postgresql://postgres:5432/kestra
+              user: kestra
+              password: kestra
+          storage:
+            type: local
+            local:
+              base-path: /app/storage
+          queue:
+            type: postgres
+          jdbc:
+            url: jdbc:postgresql://postgres:5432/kestra
+            user: kestra
+            password: kestra
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./kestra/flows:/app/flows
+      - kestra_storage:/app/storage
+      - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Spark master
+  spark-master:
+    build:
+      context: ./docker/spark
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - "8181:8080"
+      - "7077:7077"
+    volumes:
+      - ./spark/jobs:/opt/spark/jobs
+      - ./data:/opt/spark/data
+
+  # Spark worker
+  spark-worker:
+    build:
+      context: ./docker/spark
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - ./spark/jobs:/opt/spark/jobs
+      - ./data:/opt/spark/data
+    depends_on:
+      - spark-master
+
+  # dbt service
+  dbt:
+    build:
+      context: ./docker/dbt
+    volumes:
+      - ./dbt:/dbt
+    environment:
+      - DBT_PROFILES_DIR=/dbt
+      - GCP_PROJECT=${GCP_PROJECT}
+      - GOOGLE_APPLICATION_CREDENTIALS=/dbt/keyfile.json
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  kestra_storage:
