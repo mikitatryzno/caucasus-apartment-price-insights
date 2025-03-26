@@ -145,6 +145,7 @@ make terraform-apply
 
 ## Project Structure
 
+```
 caucasus-apartment-price-insights/
 ├── .github/workflows/           # CI/CD configuration (to be added later if needed)
 ├── terraform/                   # Infrastructure as Code
@@ -188,6 +189,8 @@ caucasus-apartment-price-insights/
 ├── Makefile                     # Makefile for common commands
 ├── requirements.txt             # Python dependencies
 └── README.md                    # Project documentation
+
+```
 
 
 ## Data Warehouse Design
