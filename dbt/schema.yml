@@ -6,6 +6,10 @@ models:
     columns:
       - name: id
         description: "Unique identifier"
+      - name: original_price
+        description: "Original price in local currency"
+      - name: original_currency
+        description: "Original currency (GEL, USD, AZM)"
       - name: price
         description: "Price in USD"
       - name: area
@@ -16,10 +20,20 @@ models:
         description: "City name"
       - name: neighborhood
         description: "Neighborhood name"
+      - name: price_per_sqm
+        description: "Price per square meter in USD"
+      - name: floor
+        description: "Floor number"
+      - name: building_type
+        description: "Type of building (New construction, Old construction, Under construction)"
       - name: date
         description: "Listing date"
-      - name: price_per_sqm
-        description: "Price per square meter"
+      - name: country
+        description: "Country name"
+      - name: size_category
+        description: "Size category (Small, Medium, Large, Very Large)"
+      - name: floor_position
+        description: "Floor position (Ground floor, Middle floor, High floor)"
 
   - name: price_analysis
     description: "Monthly price analysis by city and neighborhood"
@@ -28,6 +42,10 @@ models:
         description: "City name"
       - name: neighborhood
         description: "Neighborhood name"
+      - name: country
+        description: "Country name"
+      - name: building_type
+        description: "Type of building"
       - name: date
         description: "Month (first day of month)"
       - name: avg_price
@@ -36,6 +54,12 @@ models:
         description: "Average price per square meter in USD"
       - name: listing_count
         description: "Number of listings"
+      - name: avg_area
+        description: "Average area in square meters"
+      - name: avg_rooms
+        description: "Average number of rooms"
+      - name: avg_floor
+        description: "Average floor"
       - name: prev_month_avg_price
         description: "Average price in the previous month"
       - name: price_change_pct
@@ -46,6 +70,10 @@ models:
     columns:
       - name: city
         description: "City name"
+      - name: country
+        description: "Country name"
+      - name: building_type
+        description: "Type of building"
       - name: date
         description: "Month (first day of month)"
       - name: avg_price
@@ -62,14 +90,52 @@ models:
         description: "Average price for 3-room apartments"
       - name: avg_price_4plus_rooms
         description: "Average price for 4+ room apartments"
+      - name: avg_price_ground_floor
+        description: "Average price per sqm for ground floor apartments"
+      - name: avg_price_middle_floor
+        description: "Average price per sqm for middle floor apartments"
+      - name: avg_price_high_floor
+        description: "Average price per sqm for high floor apartments"
 
   - name: room_price_comparison
     description: "Price comparison by room count across cities"
     columns:
       - name: city
         description: "City name"
+      - name: country
+        description: "Country name"
       - name: rooms
         description: "Number of rooms"
+      - name: building_type
+        description: "Type of building"
+      - name: date
+        description: "Month (first day of month)"
+      - name: listing_count
+        description: "Number of listings"
+      - name: avg_price
+        description: "Average price in USD"
+      - name: avg_original_price
+        description: "Average price in original currency"
+      - name: original_currency
+        description: "Original currency"
+      - name: avg_price_per_sqm
+        description: "Average price per square meter in USD"
+      - name: avg_area
+        description: "Average area in square meters"
+      - name: avg_price_per_room
+        description: "Average price per room"
+      - name: affordability_index
+        description: "Affordability index (higher = more affordable)"
+
+  - name: building_type_analysis
+    description: "Analysis of prices by building type"
+    columns:
+      - name: city
+        description: "City name"
+      - name: country
+        description: "Country name"
+      - name: building_type
+        description: "Type of building"
       - name: date
         description: "Month (first day of month)"
       - name: listing_count
@@ -80,3 +146,9 @@ models:
         description: "Average price per square meter in USD"
       - name: avg_area
         description: "Average area in square meters"
+      - name: avg_rooms
+        description: "Average number of rooms"
+      - name: avg_floor
+        description: "Average floor"
+      - name: new_vs_old_premium
+        description: "Price premium for new vs old construction (ratio)"
