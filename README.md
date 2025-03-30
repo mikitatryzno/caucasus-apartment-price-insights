@@ -16,7 +16,7 @@ Key questions this project answers:
 
 ## Architecture
 
-![Architecture Diagram](docs/architecture.png)
+![Architecture Diagram](architecture.png)
 
 The project uses the following architecture:
 1. **Data Sources**: CSV files containing apartment data from the three cities
