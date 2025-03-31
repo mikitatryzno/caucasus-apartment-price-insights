@@ -267,14 +267,29 @@ The BigQuery tables are optimized by:
    - Looker Studio connects to BigQuery
    - Dashboard visualizes key insights from the data
 
+## Dashboard
+
+The interactive dashboard provides insights into apartment prices across the Caucasus region:
+
+![Caucasus Apartment Price Dashboard](looker_studio_dashboard.png)
+
+### Key Insights
+
+- **Price Comparison**: Average apartment prices in USD across the three capital cities
+- **Room and floor Distribution**: Analysis of apartment sizes by number of rooms
+- **Building Types**: Price differences between new and old construction
+- **Neighborhood Analysis**: Grid for finding top neighborhoods in each city
+
+### Dashboard Features
+
+- City, floor, rooms and building type filtering
+- Interactive charts
+
 ## Future Improvements
 
 - Add real-time data ingestion from property listing APIs
 - Implement machine learning models for price prediction
 - Expand analysis to include more cities and property types
-- Add user authentication for the dashboard
-- Implement data quality monitoring
-- Add alerting for pipeline failures
 
 ## Troubleshooting
 
