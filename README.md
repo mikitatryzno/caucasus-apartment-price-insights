@@ -201,15 +201,6 @@ The BigQuery data warehouse is designed with performance in mind:
 - **Clustering**: Tables are clustered by city and neighborhood to optimize queries that filter by location
 - **Materialized Views**: dbt creates materialized views for common query patterns
 
-## Dashboard
-
-The final dashboard provides insights into apartment prices across the three cities:
-
-1. **Price Comparison**: Average prices by city and number of rooms
-2. **Time Series Analysis**: Price trends over time for each city
-3. **Neighborhood Analysis**: Price distribution within each city
-4. **Room Count Analysis**: How prices vary by number of rooms
-
 ## Explanation of Design Choices
 
 ### Why Kestra for Workflow Orchestration?
